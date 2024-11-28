@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Product Explorer</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="category_label">Category:</string>
+    <string name="product_price_format">NGN %1$s</string>
+    <string name="product_rating_count_format">(%1$s ratings)</string>
+    <string name="product_details">Product Details</string>
+    <string name="product_store">Product Store</string>
+    <string name="filter">Filter</string>
+    <string name="server_error_try_again">Server Error. Try again!</string>
+    <string name="related_products">Related Products</string>
+    <string name="item_price_format">₦ %1$s</string>
+    <string name="item_rating_format">(%1$s)</string>
+</resources>

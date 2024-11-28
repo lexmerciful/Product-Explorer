@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="content_padding">16dp</dimen>
+    <dimen name="item_spacing_xs">5dp</dimen>
+    <dimen name="item_spacing_sm">10dp</dimen>
+    <dimen name="item_spacing_md">15dp</dimen>
+    <dimen name="item_spacing_lg">20dp</dimen>
+    <dimen name="item_spacing_xl">25dp</dimen>
+    <dimen name="item_spacing_xxl">30dp</dimen>
+    <dimen name="product_image_height">300dp</dimen>
+    <dimen name="item_product_image_size">180dp</dimen>
+    <dimen name="item_bottom_sheet_menu_size">24dp</dimen>
+
+</resources>

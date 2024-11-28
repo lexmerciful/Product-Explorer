@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:elevation="10dp"
+    app:cardCornerRadius="5dp"
+    app:cardUseCompatPadding="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/item_spacing_xs">
+
+        <ImageView
+            android:id="@+id/product_imageview"
+            android:layout_width="@dimen/item_product_image_size"
+            android:layout_height="@dimen/item_product_image_size"
+            android:scaleType="centerCrop"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/product_title_textview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/item_spacing_xs"
+            android:layout_marginHorizontal="@dimen/item_spacing_xs"
+            android:fontFamily="@font/gilroy_regular"
+            android:textSize="14sp"
+            android:lines="2"
+            android:maxLines="2"
+            android:ellipsize="end"
+            tools:text="Mens Casual Premium Slim Fit T-Shirts"
+            app:layout_constraintStart_toStartOf="@id/product_imageview"
+            app:layout_constraintEnd_toEndOf="@id/product_imageview"
+            app:layout_constraintTop_toBottomOf="@id/product_imageview"
+            />
+
+        <TextView
+            android:id="@+id/price_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/item_spacing_xs"
+            android:fontFamily="@font/gilroy_medium"
+            android:textSize="16sp"
+            android:maxLines="1"
+            tools:text="₦ 109.45"
+            app:layout_constraintTop_toBottomOf="@id/product_title_textview"
+            app:layout_constraintStart_toStartOf="@id/product_title_textview"/>
+
+        <ImageView
+            android:id="@+id/star_imageview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/item_spacing_xs"
+            android:src="@drawable/ic_star"
+            app:layout_constraintStart_toStartOf="@id/price_textview"
+            app:layout_constraintTop_toBottomOf="@id/price_textview"/>
+
+        <TextView
+            android:id="@+id/rating_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/item_spacing_xs"
+            android:textStyle="bold"
+            android:fontFamily="@font/gilroy_medium"
+            tools:text="3.8"
+            app:layout_constraintStart_toEndOf="@id/star_imageview"
+            app:layout_constraintBottom_toBottomOf="@id/star_imageview"
+            app:layout_constraintTop_toTopOf="@id/star_imageview"/>
+
+        <TextView
+            android:id="@+id/rating_count_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/item_spacing_xs"
+            android:fontFamily="@font/gilroy_medium"
+            tools:text="(390)"
+            app:layout_constraintStart_toEndOf="@id/rating_textview"
+            app:layout_constraintBottom_toBottomOf="@id/rating_textview"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
