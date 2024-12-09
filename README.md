@@ -14,32 +14,13 @@
 
 <h2>Screenshots</h2>
 
-<img src="./Screenshots/Screenshot1.jpg" alt="Product List Error State Dark Theme" width="300"> <img src="./Screenshots/Screenshot2.jpg" alt="Product List Error State Light Theme" width="300">
+<img src="./Screenshots/Screenshot2.jpg" alt="Product List Error State Light Theme" width="300"> <img src="./Screenshots/Screenshot1.jpg" alt="Product List Error State Dark Theme" width="300">
 
+<img src="./Screenshots/Screenshot3.jpg" alt="Product List Light Theme" width="300"> <img src="./Screenshots/Screenshot4.jpg" alt="Product List Dark Light Theme" width="300">
 
-<p><strong>Product List</strong></p>
-<img src="./Screenshots/Screenshot1.jpg" alt="Product List Error State Dark Theme" style="width:100%; max-width:600px;">
+<img src="./Screenshots/Screenshot6.jpg" alt="Product List Filter Menu Light Theme" width="300"> <img src="./Screenshots/Screenshot5.jpg" alt="Product List Filter Menu Dark Theme" width="300">
 
-<p><strong>Product Details</strong></p>
-<img src="./Screenshots/Screenshot2.jpg" alt="Product Details" style="width:100%; max-width:600px;">
-
-<p><strong>Product Details</strong></p>
-<img src="./Screenshots/Screenshot3.jpg" alt="Product Details" style="width:100%; max-width:600px;">
-
-<p><strong>Product Details</strong></p>
-<img src="./Screenshots/Screenshot4.jpg" alt="Product Details" style="width:100%; max-width:600px;">
-
-<p><strong>Product Details</strong></p>
-<img src="./Screenshots/Screenshot5.jpg" alt="Product Details" style="width:100%; max-width:600px;">
-
-<p><strong>Product Details</strong></p>
-<img src="./Screenshots/Screenshot6.jpg" alt="Product Details" style="width:100%; max-width:600px;">
-
-<p><strong>Product Details</strong></p>
-<img src="./Screenshots/Screenshot7.jpg" alt="Product Details" style="width:100%; max-width:600px;">
-
-<p><strong>Product Details</strong></p>
-<img src="./Screenshots/Screenshot8.jpg" alt="Product Details" style="width:100%; max-width:600px;">
+<img src="./Screenshots/Screenshot7.jpg" alt="Product Details Light Theme" width="300"> <img src="./Screenshots/Screenshot8.jpg" alt="Product Details Dark Theme" width="300">
 
 <h2>Prerequisites</h2>
 
