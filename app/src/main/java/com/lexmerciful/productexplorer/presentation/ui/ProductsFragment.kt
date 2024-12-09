@@ -35,6 +35,7 @@ import com.lexmerciful.productexplorer.presentation.adapter.ProductAdapter
 import com.lexmerciful.productexplorer.presentation.viewmodel.ProductViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -44,7 +45,6 @@ class ProductsFragment : Fragment() {
     private lateinit var productAdapter: ProductAdapter
     private val productViewModel by viewModels<ProductViewModel>()
     private lateinit var navController: NavController
-    private var hasBeenHandled = false
     private var productList: List<Product>? = emptyList()
     private var filtering = "All"
 
@@ -137,21 +137,24 @@ class ProductsFragment : Fragment() {
                 productViewModel.productListFlow.collectLatest { resource ->
                     when (resource.status) {
                         Resource.Status.SUCCESS -> {
-                            Log.d(TAG, "Success ${resource.data}")
-                            setupSuccessState()
+                            val result = resource.data
+                            if (result?.isNotEmpty() == true) {
+                                productList = result
+                                setupSuccessState()
+                            } else {
+                                showErrorState(result)
+                            }
+
                         }
 
                         Resource.Status.ERROR -> {
-                            Log.d(TAG, "Error ${resource.message} ${resource.data}")
                             showErrorState(resource.data, resource.message)
                         }
 
                         Resource.Status.LOADING -> {
-                            Log.d(TAG, "Loading ${resource.data}")
                             showLoadingState()
                         }
                     }
-                    productList = resource.data
                 }
             }
         }
@@ -162,17 +165,13 @@ class ProductsFragment : Fragment() {
         binding.errorStateLinearLayout.isVisible = false
     }
 
-    private fun showErrorState(productList: List<Product>?, errorMessage: String?) {
+    private fun showErrorState(productList: List<Product>?, errorMessage: String? = null) {
         binding.loadingProgressBar.isVisible = false
-        if (productList?.isEmpty() == true) {
+        if (productList.isNullOrEmpty()) {
             binding.errorStateLinearLayout.isVisible = true
         } else {
             binding.errorStateLinearLayout.isVisible = false
-            if (!hasBeenHandled) {
-                Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
-                hasBeenHandled = true
-            }
-
+            Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -218,7 +217,6 @@ class ProductsFragment : Fragment() {
     private fun setupSwipeRefresh() {
         binding.productSwipeRefreshLayout.setOnRefreshListener {
             binding.productSwipeRefreshLayout.isRefreshing = false
-            hasBeenHandled = false
             productViewModel.refreshProduct()
         }
     }

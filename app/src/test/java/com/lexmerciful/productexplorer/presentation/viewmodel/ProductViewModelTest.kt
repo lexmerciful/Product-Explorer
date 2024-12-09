@@ -3,15 +3,13 @@ package com.lexmerciful.productexplorer.presentation.viewmodel
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import app.cash.turbine.test
 import com.lexmerciful.productexplorer.common.Resource
-import com.lexmerciful.productexplorer.data.repository.FakeProductRepository
 import com.lexmerciful.productexplorer.domain.model.Product
 import com.lexmerciful.productexplorer.domain.model.Rating
 import com.lexmerciful.productexplorer.domain.repository.ProductRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -20,6 +18,9 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.Mock
+import org.mockito.Mockito.`when`
+import org.mockito.MockitoAnnotations
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ProductViewModelTest {
@@ -27,17 +28,18 @@ class ProductViewModelTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    private lateinit var fakeProductRepository: FakeProductRepository
-    private lateinit var viewModel: ProductViewModel
+    @Mock
+    private lateinit var productRepository: ProductRepository
 
-    private val testDispatcher = UnconfinedTestDispatcher()
+    private val productViewModel: ProductViewModel by lazy {
+        ProductViewModel(productRepository)
+    }
+    private val testDispatcher = StandardTestDispatcher()
 
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
-        fakeProductRepository = FakeProductRepository()
-        viewModel = ProductViewModel(fakeProductRepository)
-        viewModel.refreshProduct()
+        MockitoAnnotations.openMocks(this)
     }
 
     @After
@@ -45,60 +47,55 @@ class ProductViewModelTest {
         Dispatchers.resetMain()
     }
 
+
     @Test
     fun `fetchProducts emits loading and success`() = runTest {
         val products = listOf(
             Product(1, "Product 1", 10.0, "Description 1", "Category 1", "Image 1", Rating(4.5, 100)),
             Product(2, "Product 2", 20.0, "Description 2", "Category 2", "Image 2", Rating(3.8, 50))
         )
+        `when`(productRepository.getProducts()).thenReturn(flowOf(Resource.loading(), Resource.success(products)))
 
-        viewModel.productListFlow.test {
-            assertEquals(Resource.loading(emptyList<Product>()), awaitItem())
+        //doReturn(flowOf(Resource.success(products))).`when`(productRepository.getProducts())
+        productViewModel.productListFlow.test {
+            assertEquals(Resource.loading(null), awaitItem())
             assertEquals(Resource.success(products), awaitItem())
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
     @Test
-    fun `fetchProducts emits loading and error on network failure`() = runTest {
-        fakeProductRepository.setReturnNetworkError(true)
-        viewModel.productListFlow.test {
-            assertEquals(Resource.loading(emptyList<Product>()), awaitItem())
-            assertEquals(Resource.error<List<Product>>("Network Error", emptyList()), awaitItem())
-        }
-    }
-
-    @Test
-    fun `fetchProducts emits success and then error with cache data on refresh with network failure`() = runTest {
-        val successData = listOf(
+    fun `fetchProducts emits loading and error`() = runTest {
+        val products = listOf(
             Product(1, "Product 1", 10.0, "Description 1", "Category 1", "Image 1", Rating(4.5, 100)),
             Product(2, "Product 2", 20.0, "Description 2", "Category 2", "Image 2", Rating(3.8, 50))
         )
+        `when`(productRepository.getProducts()).thenReturn(flowOf(Resource.error("Network Error", products)))
 
-        // Initial success with cache data saved
-        viewModel.productListFlow.test {
-            assertEquals(Resource.loading(emptyList<Product>()), awaitItem())
-            assertEquals(Resource.success(successData), awaitItem())
-        }
-
-        // Simulate network error with cached data
-        fakeProductRepository.setReturnNetworkError(true)
-        viewModel.refreshProduct()
-        viewModel.productListFlow.test {
-            assertEquals(Resource.loading(successData), awaitItem())
-            assertEquals(Resource.error("Network Error", successData), awaitItem())
+        productViewModel.productListFlow.test {
+            assertEquals(Resource.loading(null), awaitItem())
+            assertEquals(Resource.error("Network Error", products), awaitItem())
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
     @Test
-    fun `filteredProductsFlow filters products by category`() = runTest {
-        viewModel.setFilter("Category 1")
-        viewModel.filteredProductsFlow.test {
+    fun `setFilter filters products based on category correctly`() = runTest {
+        val products = listOf(
+            Product(1, "Product 1", 10.0, "Description 1", "Category 1", "Image 1", Rating(4.5, 100)),
+            Product(2, "Product 2", 20.0, "Description 2", "Category 2", "Image 2", Rating(3.8, 50))
+        )
+        val filteredProducts = listOf(Product(1, "Product 1", 10.0, "Description 1", "Category 1", "Image 1", Rating(4.5, 100)))
+        `when`(productRepository.getProducts()).thenReturn(flowOf(Resource.success(products)))
+
+        productViewModel.setFilter("Category 1")
+
+        productViewModel.filteredProductsFlow.test {
             assertEquals(emptyList<Product>(), awaitItem())
-            val filteredProducts = listOf(
-                Product(1, "Product 1", 10.0, "Description 1", "Category 1", "Image 1", Rating(4.5, 100))
-            )
             assertEquals(filteredProducts, awaitItem())
+
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
-    }
+}

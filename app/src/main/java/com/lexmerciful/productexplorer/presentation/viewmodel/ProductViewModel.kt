@@ -1,23 +1,16 @@
 package com.lexmerciful.productexplorer.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lexmerciful.productexplorer.common.Resource
 import com.lexmerciful.productexplorer.domain.model.Product
 import com.lexmerciful.productexplorer.domain.repository.ProductRepository
-import com.lexmerciful.productexplorer.presentation.ui.ProductsFragment
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,7 +21,7 @@ class ProductViewModel @Inject constructor(
 ): ViewModel() {
 
     private val _productListFlow = MutableStateFlow<Resource<List<Product>>>(Resource.loading())
-    val productListFlow: StateFlow<Resource<List<Product>>> = _productListFlow
+    val productListFlow = _productListFlow.asStateFlow()
 
     private val _productFilterMutableStateFlow = MutableStateFlow<String?>(null)
 
@@ -37,17 +30,15 @@ class ProductViewModel @Inject constructor(
     }
 
     private fun fetchProducts() {
-        //Log.d("ProductsFragmentViemodel", "Load")
         viewModelScope.launch {
             repository.getProducts().collect { resource ->
                 _productListFlow.value = resource
-                //Log.d("ProductsFragmentViemodel", "Error ${ "hgfh" } ")
             }
         }
     }
 
     val filteredProductsFlow: StateFlow<List<Product>> = combine(
-        _productListFlow,
+        productListFlow,
         _productFilterMutableStateFlow
     ) { productResource, filter ->
         if (productResource.data?.isNotEmpty() == true) {

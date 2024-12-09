@@ -14,6 +14,7 @@ appcompat = "1.7.0"
 kotlinxCoroutinesAndroid = "1.7.1"
 kotlinxCoroutinesTest = "1.9.0"
 kotlinxCoroutinesTestVersion = "1.2.1"
+kotlinxSerializationJson = "1.6.0"
 lifecycleExtensions = "2.2.0"
 lifecycleViewmodelKtx = "2.8.4"
 material = "1.12.0"
@@ -23,6 +24,8 @@ constraintlayout = "2.2.0"
 hilt = "2.49"
 materialVersion = "1.11.0"
 mockitoCore = "2.21.0"
+mockitoKotlin = "3.2.0"
+mockk = "1.13.5"
 navigation = "2.5.0"
 navigationFragmentKtx = "2.7.7"
 retrofit = "2.9.0"
@@ -56,11 +59,14 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 kotlinx-coroutines-test-v121 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTestVersion" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 material-v1110 = { module = "com.google.android.material:material", version.ref = "materialVersion" }
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore" }
+mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlin" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 truth = { module = "com.google.truth:truth", version.ref = "truth" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }

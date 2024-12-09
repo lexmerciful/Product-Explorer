@@ -84,6 +84,9 @@ dependencies {
     testImplementation (libs.kotlinx.coroutines.test)
     testImplementation (libs.truth)
     testImplementation (libs.mockito.core)
+    testImplementation (libs.mockito.kotlin)
+    testImplementation (libs.mockk)
+    testImplementation (libs.kotlinx.serialization.json)
     testImplementation(libs.turbine)
 
     // Instrumented Test

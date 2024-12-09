@@ -10,22 +10,30 @@ import kotlinx.coroutines.flow.map
 
 fun <T, A> performGetOperation(
     databaseQuery: () -> Flow<T>,
-    networkCall: suspend () -> Resource<A>,
-    saveCallResult: suspend (A) -> Unit
+    networkCall: suspend () -> A,
+    saveCallResult: suspend (A) -> Unit,
+    shouldFetch: (T) -> Boolean = { true }
 ): Flow<Resource<T>> = flow {
-    emit(Resource.loading())
+    val data = databaseQuery().first()
 
-    val databaseSource = databaseQuery().first()
+    if (shouldFetch(data)) {
+        // Emit loading state with cached data
+        emit(Resource.loading(data))
+        try {
+            // Network call
+            val resultType = networkCall()
 
-    try {
-        emit(Resource.loading(databaseSource))
-        val remoteData = networkCall()
-        saveCallResult(remoteData.data!!)
+            // Save result to database
+            saveCallResult(resultType)
+
+            // Emit success state with the updated database data
+            emitAll(databaseQuery().map { Resource.success(it) })
+        } catch (throwable: Throwable) {
+            println("Emitting error: ${throwable.message}, data: $data")
+            emit(Resource.error(throwable.localizedMessage ?: "Unable to reach server. Please check your connection", data))
+        }
+
+    } else {
         emitAll(databaseQuery().map { Resource.success(it) })
-
-    } catch (exception: Throwable) {
-        Log.d("TAGII", "Error = ${exception.message}")
-        emitAll(databaseQuery().map { Resource.error(exception.message ?: "Unable to reach server. Please check your connection", it) })
     }
-
 }

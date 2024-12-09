@@ -17,20 +17,23 @@ class ProductRepositoryImpl @Inject constructor(
     override suspend fun getProducts(): Flow<Resource<List<Product>>> = performGetOperation(
         databaseQuery = { productDao.getAllProducts() },
         networkCall = { getProductsFromNetwork() },
-        saveCallResult = { productDao.insertAllProduct(it) }
+        saveCallResult = { productDao.insertAllProduct(it.data!!) }
     )
 
     private suspend fun getProductsFromNetwork(): Resource<List<Product>> {
         return try {
             val response = productApiService.getProducts()
             if (response.isSuccessful) {
-                Log.d(TAG, "Success ${response.body()}")
-                Resource.success(response.body() ?: emptyList())
+                val body = response.body()
+                if (body != null) {
+                    Resource.success(body)
+                } else {
+                    Resource.error("Server returned an empty response.")
+                }
             } else {
-                Resource.error("Unable to reach server. Please check your connection")
+                Resource.error("${response.code()}: Unable to reach server. Please check your connection")
             }
         } catch (e: Exception) {
-            Log.d(TAG, "Error ${e.localizedMessage}")
             Resource.error("Unable to reach server. Please check your connection")
         }
     }
